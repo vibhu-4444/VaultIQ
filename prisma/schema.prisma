@@ -1,0 +1,224 @@
+// =============================================================
+// VaultIQ — Database Schema
+// =============================================================
+// PostgreSQL with Prisma ORM
+// All monetary values stored as Decimal for precision.
+// UUIDs as primary keys for security (non-sequential).
+// =============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================
+// Enums
+// =============================================================
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+  CREDIT
+  INVESTMENT
+  CASH
+  OTHER
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+enum BudgetPeriod {
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum GoalPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+  CANCELLED
+}
+
+enum InsightType {
+  SPENDING_ANALYSIS
+  BUDGET_ADVICE
+  SAVINGS_TIP
+  ANOMALY
+}
+
+// =============================================================
+// Models
+// =============================================================
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String   @map("password_hash")
+  avatarUrl    String?  @map("avatar_url")
+  currency     String   @default("USD")
+  timezone     String   @default("UTC")
+  theme        String   @default("dark")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  accounts    Account[]
+  transactions Transaction[]
+  categories  Category[]
+  budgets     Budget[]
+  goals       Goal[]
+  insights    InsightHistory[]
+
+  @@map("users")
+}
+
+model Account {
+  id       String      @id @default(cuid())
+  userId   String      @map("user_id")
+  name     String
+  type     AccountType
+  balance  Decimal     @default(0) @db.Decimal(12, 2)
+  currency String      @default("USD")
+  color    String      @default("#6366F1")
+  icon     String      @default("wallet")
+  isActive Boolean     @default(true) @map("is_active")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Category {
+  id        String       @id @default(cuid())
+  userId    String       @map("user_id")
+  name      String
+  icon      String
+  color     String
+  type      CategoryType
+  isDefault Boolean      @default(false) @map("is_default")
+  sortOrder Int          @default(0) @map("sort_order")
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@index([userId])
+  @@map("categories")
+}
+
+model Transaction {
+  id            String          @id @default(cuid())
+  userId        String          @map("user_id")
+  accountId     String          @map("account_id")
+  categoryId    String?         @map("category_id")
+  amount        Decimal         @db.Decimal(12, 2)
+  type          TransactionType
+  description   String
+  notes         String?
+  date          DateTime        @db.Date
+  isRecurring   Boolean         @default(false) @map("is_recurring")
+  recurringRule String?         @map("recurring_rule")
+  tags          String[]        @default([])
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account  Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([userId, date])
+  @@index([userId, type])
+  @@index([userId, categoryId])
+  @@index([accountId])
+  @@map("transactions")
+}
+
+model Budget {
+  id         String       @id @default(cuid())
+  userId     String       @map("user_id")
+  categoryId String       @map("category_id")
+  amount     Decimal      @db.Decimal(12, 2)
+  period     BudgetPeriod
+  isActive   Boolean      @default(true) @map("is_active")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  periods  BudgetPeriodRecord[]
+
+  @@unique([userId, categoryId, period])
+  @@index([userId])
+  @@map("budgets")
+}
+
+model BudgetPeriodRecord {
+  id        String   @id @default(cuid())
+  budgetId  String   @map("budget_id")
+  spent     Decimal  @default(0) @db.Decimal(12, 2)
+  startDate DateTime @map("start_date") @db.Date
+  endDate   DateTime @map("end_date") @db.Date
+
+  budget Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+
+  @@index([budgetId, startDate])
+  @@map("budget_period_records")
+}
+
+model Goal {
+  id            String       @id @default(cuid())
+  userId        String       @map("user_id")
+  name          String
+  icon          String       @default("target")
+  color         String       @default("#6366F1")
+  targetAmount  Decimal      @map("target_amount") @db.Decimal(12, 2)
+  currentAmount Decimal      @default(0) @map("current_amount") @db.Decimal(12, 2)
+  deadline      DateTime?    @db.Date
+  priority      GoalPriority @default(MEDIUM)
+  status        GoalStatus   @default(ACTIVE)
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@map("goals")
+}
+
+model InsightHistory {
+  id        String      @id @default(cuid())
+  userId    String      @map("user_id")
+  type      InsightType
+  content   Json
+  isRead    Boolean     @default(false) @map("is_read")
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("insight_history")
+}
