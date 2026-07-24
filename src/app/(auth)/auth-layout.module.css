@@ -3,92 +3,256 @@
   min-height: 100dvh;
 }
 
-.formSide {
+/* ---- Brand Panel (Left) ---- */
+
+.brandPanel {
   flex: 1;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  padding: var(--space-8);
-}
-
-.brandSide {
-  flex: 1;
-  display: none;
   align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #0F0F12 0%, #1a1a2e 50%, #16162a 100%);
-  border-left: 1px solid var(--border-subtle);
+  background-color: var(--primary);
+  padding: var(--space-3xl);
   position: relative;
   overflow: hidden;
+}
+
+.brandGlow {
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.08);
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.brandGlow2 {
+  position: absolute;
+  bottom: -150px;
+  left: -150px;
+  width: 400px;
+  height: 400px;
+  border-radius: var(--radius-full);
+  background-color: rgba(255, 255, 255, 0.05);
+  filter: blur(80px);
+  pointer-events: none;
 }
 
 .brandContent {
   position: relative;
   z-index: 1;
+  max-width: 420px;
   text-align: center;
-  padding: var(--space-8);
-  max-width: 480px;
 }
 
 .brandLogo {
   display: inline-flex;
   align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-2xl);
+}
+
+.brandLogoIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-xl);
-  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
   color: white;
-  font-weight: var(--font-bold);
-  font-size: var(--text-2xl);
-  margin-bottom: var(--space-6);
-  box-shadow: var(--shadow-accent);
+  font-size: 28px;
+  font-weight: 700;
 }
 
-.brandTitle {
-  font-size: var(--text-3xl);
-  font-weight: var(--font-bold);
-  color: var(--text-primary);
-  margin-bottom: var(--space-3);
+.brandLogoText {
+  font-size: var(--text-headline-lg);
+  font-weight: 700;
+  color: white;
+  letter-spacing: var(--ls-headline-lg);
 }
 
-.brandSubtitle {
-  font-size: var(--text-base);
-  color: var(--text-secondary);
-  line-height: var(--leading-relaxed);
+.brandTagline {
+  font-size: var(--text-headline-md);
+  font-weight: var(--fw-headline-md);
+  color: rgba(255, 255, 255, 0.95);
+  line-height: var(--lh-headline-md);
+  margin-bottom: var(--space-md);
 }
 
-/* Decorative gradient orbs */
-.brandSide::before {
-  content: '';
+.brandDescription {
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body-lg);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ---- Form Panel (Right) ---- */
+
+.formPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-2xl);
+  background-color: var(--surface);
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 400px;
+}
+
+.formTitle {
+  font-size: var(--text-headline-md);
+  font-weight: var(--fw-headline-md);
+  letter-spacing: var(--ls-headline-md);
+  color: var(--on-surface);
+  margin-bottom: var(--space-sm);
+}
+
+.formSubtitle {
+  font-size: var(--text-body-md);
+  color: var(--on-surface-variant);
+  margin-bottom: var(--space-xl);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: var(--text-label-md);
+  font-weight: var(--fw-label-md);
+  color: var(--on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label-md);
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.inputIcon {
   position: absolute;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-  top: -100px;
-  right: -100px;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--on-surface-variant);
+  pointer-events: none;
 }
 
-.brandSide::after {
-  content: '';
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.10) 0%, transparent 70%);
-  bottom: -50px;
-  left: -50px;
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 12px 16px 12px 44px;
+  background-color: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-default);
+  font-size: var(--text-body-md);
+  color: var(--on-surface);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-@media (min-width: 1024px) {
-  .brandSide {
-    display: flex;
+.input::placeholder {
+  color: var(--on-surface-variant);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.submitButton {
+  width: 100%;
+  height: 48px;
+  background-color: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--text-title-md);
+  font-weight: var(--fw-title-md);
+  border-radius: var(--radius-default);
+  transition: opacity var(--transition-fast);
+  box-shadow: var(--shadow-primary);
+  margin-top: var(--space-sm);
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}
+
+.submitButton:active {
+  transform: scale(0.98);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin: var(--space-lg) 0;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background-color: var(--outline-variant);
+}
+
+.dividerText {
+  font-size: var(--text-label-md);
+  color: var(--on-surface-variant);
+}
+
+.switchLink {
+  text-align: center;
+  font-size: var(--text-body-md);
+  color: var(--on-surface-variant);
+  margin-top: var(--space-lg);
+}
+
+.switchLinkAction {
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.switchLinkAction:hover {
+  text-decoration: underline;
+}
+
+.error {
+  font-size: var(--text-label-md);
+  color: var(--error);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--error-container);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-sm);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
   }
-}
 
-@media (max-width: 640px) {
-  .formSide {
-    padding: var(--space-5);
+  .brandPanel {
+    display: none;
+  }
+
+  .formPanel {
+    padding: var(--space-xl) var(--space-md);
   }
 }
