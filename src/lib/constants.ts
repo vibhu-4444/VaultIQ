@@ -36,7 +36,7 @@ export const DEFAULT_CATEGORIES = [
  * Icons use Google Material Symbols names.
  */
 export const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/', icon: 'dashboard' },
+  { label: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
   { label: 'Transactions', href: '/transactions', icon: 'payments' },
   { label: 'Analytics', href: '/analytics', icon: 'query_stats' },
   { label: 'Budgets', href: '/budgets', icon: 'account_balance_wallet' },
