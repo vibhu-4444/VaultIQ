@@ -37,18 +37,18 @@ export const DEFAULT_CATEGORIES = [
  */
 export const NAV_ITEMS = [
   { label: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
-  { label: 'Transactions', href: '/transactions', icon: 'payments' },
-  { label: 'Analytics', href: '/analytics', icon: 'query_stats' },
-  { label: 'Budgets', href: '/budgets', icon: 'account_balance_wallet' },
-  { label: 'AI Assistant', href: '/ai-assistant', icon: 'smart_toy' },
+  { label: 'Transactions', href: '/dashboard/transactions', icon: 'payments' },
+  { label: 'Analytics', href: '/dashboard/analytics', icon: 'query_stats' },
+  { label: 'Budgets', href: '/dashboard/budgets', icon: 'account_balance_wallet' },
+  { label: 'AI Assistant', href: '/dashboard/ai-assistant', icon: 'smart_toy' },
 ] as const;
 
 /**
  * Bottom sidebar navigation items.
  */
 export const NAV_BOTTOM_ITEMS = [
-  { label: 'Settings', href: '/settings', icon: 'settings' },
-  { label: 'Support', href: '/support', icon: 'help_outline' },
+  { label: 'Settings', href: '/dashboard/settings', icon: 'settings' },
+  { label: 'Support', href: '/dashboard/support', icon: 'help_outline' },
 ] as const;
 
 /**
