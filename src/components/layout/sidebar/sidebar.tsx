@@ -3,17 +3,17 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { Icon, type IconName } from '@/components/icons';
-import { NAV_ITEMS, NAV_BOTTOM_ITEMS, APP_NAME } from '@/lib/constants';
-import { useUIStore } from '@/stores/ui-store';
+import { Icon } from '@/components/icons';
+import { APP_NAME, APP_TAGLINE, NAV_ITEMS, NAV_BOTTOM_ITEMS } from '@/lib/constants';
 import styles from './sidebar.module.css';
 
-export function Sidebar() {
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
+}
+
+export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
   const pathname = usePathname();
-  const collapsed = useUIStore((s) => s.sidebarCollapsed);
-  const mobileOpen = useUIStore((s) => s.sidebarMobileOpen);
-  const toggleSidebar = useUIStore((s) => s.toggleSidebar);
-  const closeMobileSidebar = useUIStore((s) => s.closeMobileSidebar);
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -26,7 +26,7 @@ export function Sidebar() {
       {mobileOpen && (
         <div
           className={styles.mobileOverlay}
-          onClick={closeMobileSidebar}
+          onClick={onCloseMobile}
           aria-hidden="true"
         />
       )}
@@ -34,17 +34,27 @@ export function Sidebar() {
       <aside
         className={cn(
           styles.sidebar,
-          collapsed && styles.collapsed,
           mobileOpen && styles.mobileOpen
         )}
         aria-label="Main navigation"
       >
         {/* Brand */}
         <div className={styles.brand}>
-          <div className={styles.logo} aria-hidden="true">
-            V
+          <div className={styles.brandRow}>
+            <div className={styles.logo} aria-hidden="true">V</div>
+            <div>
+              <div className={styles.brandName}>{APP_NAME}</div>
+              <div className={styles.brandTagline}>{APP_TAGLINE}</div>
+            </div>
           </div>
-          <span className={styles.brandName}>{APP_NAME}</span>
+        </div>
+
+        {/* New Transaction CTA */}
+        <div className={styles.ctaSection}>
+          <button className={styles.ctaButton}>
+            <Icon name="add" size={20} />
+            New Transaction
+          </button>
         </div>
 
         {/* Main Navigation */}
@@ -57,13 +67,14 @@ export function Sidebar() {
                 styles.navItem,
                 isActive(item.href) && styles.navItemActive
               )}
-              onClick={closeMobileSidebar}
-              title={collapsed ? item.label : undefined}
+              onClick={onCloseMobile}
             >
-              <span className={styles.navItemIcon}>
-                <Icon name={item.icon as IconName} size={20} />
-              </span>
-              <span className={styles.navItemLabel}>{item.label}</span>
+              <Icon
+                name={item.icon}
+                size={20}
+                filled={isActive(item.href)}
+              />
+              {item.label}
             </Link>
           ))}
         </nav>
@@ -78,27 +89,12 @@ export function Sidebar() {
                 styles.navItem,
                 isActive(item.href) && styles.navItemActive
               )}
-              onClick={closeMobileSidebar}
-              title={collapsed ? item.label : undefined}
+              onClick={onCloseMobile}
             >
-              <span className={styles.navItemIcon}>
-                <Icon name={item.icon as IconName} size={20} />
-              </span>
-              <span className={styles.navItemLabel}>{item.label}</span>
+              <Icon name={item.icon} size={20} />
+              {item.label}
             </Link>
           ))}
-
-          <button
-            className={styles.collapseButton}
-            onClick={toggleSidebar}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            <Icon
-              name={collapsed ? 'chevron-right' : 'chevron-left'}
-              size={18}
-            />
-          </button>
         </div>
       </aside>
     </>
