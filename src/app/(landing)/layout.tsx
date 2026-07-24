@@ -1,7 +1,2 @@
-export default function LandingLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <>{children}</>;
-}
+// Redundant route group layout disabled.
+export {};
