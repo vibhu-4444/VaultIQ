@@ -3,11 +3,11 @@
 // =============================================================
 
 export const APP_NAME = 'VaultIQ' as const;
+export const APP_TAGLINE = 'Premium Finance OS' as const;
 export const APP_DESCRIPTION = 'AI-Powered Personal Finance Operating System' as const;
 
 /**
  * Default categories created for every new user.
- * Icons use emoji for portability — can be swapped for an icon library later.
  */
 export const DEFAULT_CATEGORIES = [
   // Expenses
@@ -32,23 +32,23 @@ export const DEFAULT_CATEGORIES = [
 ] as const;
 
 /**
- * Navigation items for the sidebar.
+ * Main sidebar navigation items — matches design reference.
+ * Icons use Google Material Symbols names.
  */
 export const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/', icon: 'layout-dashboard' },
-  { label: 'Transactions', href: '/transactions', icon: 'arrow-left-right' },
-  { label: 'Budgets', href: '/budgets', icon: 'pie-chart' },
-  { label: 'Goals', href: '/goals', icon: 'target' },
-  { label: 'Accounts', href: '/accounts', icon: 'building-2' },
-  { label: 'Insights', href: '/insights', icon: 'sparkles' },
-  { label: 'Reports', href: '/reports', icon: 'bar-chart-3' },
+  { label: 'Dashboard', href: '/', icon: 'dashboard' },
+  { label: 'Transactions', href: '/transactions', icon: 'payments' },
+  { label: 'Analytics', href: '/analytics', icon: 'query_stats' },
+  { label: 'Budgets', href: '/budgets', icon: 'account_balance_wallet' },
+  { label: 'AI Assistant', href: '/ai-assistant', icon: 'smart_toy' },
 ] as const;
 
 /**
- * Bottom navigation items.
+ * Bottom sidebar navigation items.
  */
 export const NAV_BOTTOM_ITEMS = [
   { label: 'Settings', href: '/settings', icon: 'settings' },
+  { label: 'Support', href: '/support', icon: 'help_outline' },
 ] as const;
 
 /**
