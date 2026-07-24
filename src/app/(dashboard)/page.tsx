@@ -1,4 +1,12 @@
-// This route group does not have a root page.
-// The dashboard is served from /dashboard via (dashboard)/dashboard/page.tsx
-// The root / is handled by (landing)/page.tsx
-export { default } from './dashboard/page';
+import { redirect } from 'next/navigation';
+
+/**
+ * Route group root redirect.
+ * 
+ * Note: This file exists only because we can't delete it.
+ * The (landing) route group handles the actual / page.
+ * If Next.js resolves this file for /, it redirects to /dashboard.
+ */
+export default function RootDashboardRedirect() {
+  redirect('/dashboard');
+}
