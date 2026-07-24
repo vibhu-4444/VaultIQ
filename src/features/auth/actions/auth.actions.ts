@@ -1,5 +1,3 @@
-'use server';
-
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { signIn } from '@/lib/auth';
@@ -88,7 +86,6 @@ export async function signUp(formData: FormData): Promise<ActionResult> {
     });
   } catch {
     // Sign-in after registration is best-effort
-    // User can manually sign in if this fails
   }
 
   return { success: true, data: undefined };

@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { authConfig } from '@/lib/auth.config';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+const authInstance = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -58,5 +58,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.AUTH_SECRET || 'static-export-fallback-secret-key-32',
 });
+
+export const handlers = authInstance.handlers;
+export const auth = authInstance.auth;
+
+export async function signIn(...args: Parameters<typeof authInstance.signIn>) {
+  try {
+    return await authInstance.signIn(...args);
+  } catch {
+    return null;
+  }
+}
+
+export async function signOut(...args: Parameters<typeof authInstance.signOut>) {
+  try {
+    return await authInstance.signOut(...args);
+  } catch {
+    return null;
+  }
+}
