@@ -1,11 +1,10 @@
-import NextAuth from 'next-auth';
-import { authConfig } from '@/lib/auth.config';
+import { NextResponse } from 'next/server';
 
-export default NextAuth(authConfig).auth;
+// Middleware is disabled for static GitHub Pages export
+export function middleware() {
+  return NextResponse.next();
+}
 
 export const config = {
-  // Match all routes except static files and API routes
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|images|fonts).*)',
-  ],
+  matcher: [],
 };
